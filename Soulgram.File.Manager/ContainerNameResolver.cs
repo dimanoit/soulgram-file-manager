@@ -27,7 +27,7 @@ public class ContainerNameResolver : IContainerNameResolver
         _contentTypeToContainerNameDictionary.TryGetValue(markerWithoutFileExtension, out var rawContainerName);
 
         return string.IsNullOrEmpty(rawContainerName)
-            ? BuildContainerName(_storageOptions.TextContainer, userId)
+            ? BuildContainerName(_storageOptions.UnknownContainer, userId)
             : BuildContainerName(rawContainerName, userId);
     }
     
