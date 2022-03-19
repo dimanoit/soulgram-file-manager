@@ -1,6 +1,6 @@
 namespace Soulgram.File.Manager;
 
-public class FileInfo
+public record FileInfo
 {
     public string Name { get; init; }
     public string ContentType { get; init; }
