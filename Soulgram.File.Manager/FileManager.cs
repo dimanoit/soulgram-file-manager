@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Storage;
+using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
 
@@ -7,8 +8,8 @@ namespace Soulgram.File.Manager;
 public class FileManager : IFileManager
 {
     private readonly BlobStorageOptions _storageOptions;
-    private readonly IContainerNameResolver _containerNameResolver; 
-    
+    private readonly IContainerNameResolver _containerNameResolver;
+
     public FileManager(
         IOptions<BlobStorageOptions> storageOptions,
         IContainerNameResolver containerNameResolver)
@@ -17,18 +18,53 @@ public class FileManager : IFileManager
         _storageOptions = storageOptions.Value;
     }
 
+    public async Task<IEnumerable<string>> UploadFilesAndGetIds(IEnumerable<FileInfo> files, string userId)
+    {
+        var options = new BlobUploadOptions
+        {
+            TransferOptions = new StorageTransferOptions
+            {
+                MaximumConcurrency = 4,
+                MaximumTransferSize = 50 * 1024 * 1024
+            }
+        };
+
+        var uploadTasks = files
+            .Select(f =>
+            {
+                options.HttpHeaders = new BlobHttpHeaders
+                {
+                    ContentType = f.ContentType
+                };
+                
+                return UploadFileAsync(f, userId, options);
+            })
+            .ToArray();
+
+        await Task.WhenAll(uploadTasks);
+
+        return uploadTasks.Select(t => t.Result);
+    }
+
     public async Task<string> UploadFileAsync(FileInfo file, string userId)
+    {
+        return await UploadFileAsync(file, userId, new BlobUploadOptions()
+        {
+            HttpHeaders = new BlobHttpHeaders
+            {
+                ContentType = file.ContentType
+            }
+        });
+    }
+
+    public async Task<string> UploadFileAsync(FileInfo file, string userId, BlobUploadOptions options)
     {
         try
         {
             var containerName = _containerNameResolver.GetContainerName(file.ContentType, userId);
             var containerClient = await GetContainerClient(file, containerName);
 
-            var response = await containerClient.UploadAsync(file.Content,
-                new BlobHttpHeaders()
-                {
-                    ContentType = file.ContentType
-                });
+            await containerClient.UploadAsync(file.Content, options);
 
             return containerClient.Uri.ToString();
         }
