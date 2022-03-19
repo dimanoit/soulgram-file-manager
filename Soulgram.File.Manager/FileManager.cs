@@ -25,7 +25,7 @@ public class FileManager : IFileManager
             TransferOptions = new StorageTransferOptions
             {
                 MaximumConcurrency = 4,
-                MaximumTransferSize = 50 * 1024 * 1024
+                MaximumTransferSize = 50 * 1024 * 1024 // 50mb
             }
         };
 
@@ -78,7 +78,7 @@ public class FileManager : IFileManager
     {
         var blobContainerClient = new BlobContainerClient(_storageOptions.ConnectionString, containerName);
 
-        await blobContainerClient.CreateIfNotExistsAsync();
+        await blobContainerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
 
         var containerClient = blobContainerClient.GetBlobClient(file.Name);
         return containerClient;
