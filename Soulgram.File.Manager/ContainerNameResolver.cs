@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Options;
+using Soulgram.File.Manager.Interfaces;
+using Soulgram.File.Manager.Models;
 
 namespace Soulgram.File.Manager;
 

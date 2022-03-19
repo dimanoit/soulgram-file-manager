@@ -1,4 +1,4 @@
-namespace Soulgram.File.Manager;
+namespace Soulgram.File.Manager.Models;
 
 public record BlobStorageOptions
 {

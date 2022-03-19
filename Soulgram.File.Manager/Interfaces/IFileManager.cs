@@ -1,6 +1,7 @@
 using Azure.Storage.Blobs.Models;
+using FileInfo = Soulgram.File.Manager.Models.FileInfo;
 
-namespace Soulgram.File.Manager;
+namespace Soulgram.File.Manager.Interfaces;
 
 public interface IFileManager
 {

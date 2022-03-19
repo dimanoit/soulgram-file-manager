@@ -1,4 +1,4 @@
-namespace Soulgram.File.Manager;
+namespace Soulgram.File.Manager.Interfaces;
 
 public interface IContainerNameResolver
 {

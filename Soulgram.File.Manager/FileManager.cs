@@ -2,6 +2,9 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Options;
+using Soulgram.File.Manager.Interfaces;
+using Soulgram.File.Manager.Models;
+using FileInfo = Soulgram.File.Manager.Models.FileInfo;
 
 namespace Soulgram.File.Manager;
 
