@@ -1,3 +1,7 @@
 namespace Soulgram.File.Manager.Models;
 
-public record LocalFileManagerOptions(string FullPath, string RelatedPath);
+public record LocalFileManagerOptions
+{
+    public string FullPath { get; init; }
+    public string RelatedPath { get; init; }
+}
