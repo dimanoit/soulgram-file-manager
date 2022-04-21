@@ -18,7 +18,7 @@ public class LocalFileManager : IFileManager
     public async Task<string> UploadFileAsync(FileInfo file, string userId)
     {
         var fileType = file.Name.Split('.').Last();
-        var fileName = Guid.NewGuid() + fileType;
+        var fileName = Guid.NewGuid() + "." +fileType;
         var fullFilePath = _fileOptions.FullPath + fileName;
         
         await using (var fileStream = System.IO.File.Create(fullFilePath))
