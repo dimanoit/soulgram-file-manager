@@ -2,9 +2,9 @@ namespace Soulgram.File.Manager.Models;
 
 public record BlobStorageOptions
 {
-    public string ConnectionString { get; init; }
-    public string ImagesContainer { get; init; }
-    public string VideoContainer { get; init; }
-    public string TextContainer { get; init; }
-    public string UnknownContainer { get; init; }
+    public string ConnectionString { get; init; } = null!;
+    public string ImagesContainer { get; init; } = null!;
+    public string VideoContainer { get; init; } = null!;
+    public string TextContainer { get; init; } = null!;
+    public string UnknownContainer { get; init; } = null!;
 }

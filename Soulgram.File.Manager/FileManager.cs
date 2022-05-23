@@ -10,8 +10,8 @@ namespace Soulgram.File.Manager;
 
 public class FileManager : IFileManager
 {
-    private readonly BlobStorageOptions _storageOptions;
     private readonly IContainerNameResolver _containerNameResolver;
+    private readonly BlobStorageOptions _storageOptions;
 
     public FileManager(
         IOptions<BlobStorageOptions> storageOptions,
@@ -39,7 +39,7 @@ public class FileManager : IFileManager
                 {
                     ContentType = f.ContentType
                 };
-                
+
                 return UploadFileAsync(f, userId, options);
             })
             .ToArray();
@@ -49,9 +49,15 @@ public class FileManager : IFileManager
         return uploadTasks.Select(t => t.Result);
     }
 
+    public Task DeleteFileAsync(string fileUrl)
+    {
+        //TODO should be implemented with blob storage integration
+        throw new NotImplementedException();
+    }
+
     public async Task<string> UploadFileAsync(FileInfo file, string userId)
     {
-        return await UploadFileAsync(file, userId, new BlobUploadOptions()
+        return await UploadFileAsync(file, userId, new BlobUploadOptions
         {
             HttpHeaders = new BlobHttpHeaders
             {

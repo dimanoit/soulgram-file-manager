@@ -15,12 +15,24 @@ public class LocalFileManager : IFileManager
         _fileOptions = fileOptions.Value;
     }
 
+    public async Task DeleteFileAsync(string fileUrl)
+    {
+        await Task.Run(() =>
+        {
+            var fullName = _fileOptions.FullPath + GetFileName(fileUrl);
+            if (System.IO.File.Exists(fullName))
+            {
+                System.IO.File.Delete(fullName);
+            }
+        });
+    }
+
     public async Task<string> UploadFileAsync(FileInfo file, string userId)
     {
         var fileType = file.Name.Split('.').Last();
-        var fileName = Guid.NewGuid() + "." +fileType;
+        var fileName = Guid.NewGuid() + "." + fileType;
         var fullFilePath = _fileOptions.FullPath + fileName;
-        
+
         await using (var fileStream = System.IO.File.Create(fullFilePath))
         {
             file.Content.Seek(0, SeekOrigin.Begin);
@@ -44,6 +56,14 @@ public class LocalFileManager : IFileManager
 
     public Task<string> UploadFileAsync(FileInfo file, string userId, BlobUploadOptions options)
     {
+        //TODO should cut this method from interface 
         throw new NotImplementedException();
+    }
+
+    private string GetFileName(string url)
+    {
+        var indexOfStartingFileName = url.LastIndexOf("/", StringComparison.Ordinal) + 1;
+        var fileName = url.Substring(indexOfStartingFileName);
+        return fileName;
     }
 }
